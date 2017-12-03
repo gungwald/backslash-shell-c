@@ -14,7 +14,7 @@
 #include "StringBuilder.h"
 #include "Tokenizer.h"
 
-bool isTokenChar(char c);
+static bool isTokenChar(char c);
 
 Tokenizer new_Tokenizer(const String text)
 {
@@ -45,7 +45,7 @@ String tkGetToken(Tokenizer t)
             t->index++;
         }
     }
-    return sbHarvest(token);
+    return sFreeIfEmpty(sbHarvest(token));
 }
 
 bool isTokenChar(char c)

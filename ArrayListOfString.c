@@ -15,7 +15,7 @@ ArrayListOfString new_ArrayListOfString()
     return a;
 }
 
-void alosFree(ArrayListOfString a)
+void alsFree(ArrayListOfString a)
 {
     for (size_t i = 0; i < a->size; i++) {
         if (a->elements[i] != NULL) {
@@ -34,19 +34,19 @@ void ensureCapacity(ArrayListOfString a, size_t size)
     a->elements = (char **) GC_REALLOC(a->elements, sizeof(char *) * a->capacity);
 }
 
-void alosAdd(ArrayListOfString a, char *s)
+void alsAdd(ArrayListOfString a, char *s)
 {
     ensureCapacity(a, a->size + 1);
     a->elements[a->size] = s;
     (a->size)++;
 }
 
-size_t alosSize(ArrayListOfString a)
+size_t alsSize(ArrayListOfString a)
 {
     return a->size;
 }
 
-void alosClear(ArrayListOfString a)
+void alsClear(ArrayListOfString a)
 {
     for (size_t i = 0; i < a->size; i++) {
         if (a->elements[i] != NULL) {
@@ -56,22 +56,22 @@ void alosClear(ArrayListOfString a)
     a->size = 0;
 }
 
-bool alosIsEmpty(ArrayListOfString a)
+bool alsIsEmpty(ArrayListOfString a)
 {
     return a->size == 0;
 }
 
-char *alosGet(ArrayListOfString a, size_t index)
+char *alsGet(ArrayListOfString a, size_t index)
 {
     return a->elements[index];
 }
 
-void alosSet(ArrayListOfString a, size_t index, char *s)
+void alsSet(ArrayListOfString a, size_t index, char *s)
 {
     a->elements[index] = s;
 }
 
-char *alosRemove(ArrayListOfString a, size_t index)
+char *alsRemove(ArrayListOfString a, size_t index)
 {
     char *element = a->elements[index];
     for (size_t i = index + 1; i < a->size; i++) {

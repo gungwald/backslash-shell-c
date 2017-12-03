@@ -30,6 +30,7 @@ static String buildPrompt();
 static ArrayListOfString parse(String line);
 static int eval(ArrayListOfString args);
 static String getCurrentDirectory();
+static char *replaceChar(char *s, char toReplace, char replacement);
 
 static bool running = false;
 static char drive[MAX_DRIVE_LEN + 1];
@@ -59,7 +60,19 @@ String getCurrentDirectory()
         GC_FREE(cwd);
         cwd = (char *) GC_MALLOC(sizeof(char) * bufferSize);
     }
+    replaceChar(cwd, '/', '\\');
     return cwd;
+}
+
+char *replaceChar(char *s, char toReplace, char replacement)
+{
+	size_t len = strlen(s);
+	for (size_t i = 0; i < len; i++) {
+		if (s[i] == toReplace) {
+			s[i] = replacement;
+		}
+	}
+	return s;
 }
 
 String buildPrompt()
@@ -76,12 +89,20 @@ ArrayListOfString parse(String line)
     Tokenizer tk = new_Tokenizer(line);
     String token;
     while ((token = tkGetToken(tk)) != NULL) {
-        alosAdd(args, token);
+        alsAdd(args, token);
     }
     return args;
 }
 
 int eval(ArrayListOfString args)
 {
-    return 0;
+	int exitCode = 0;
+	String cmd = sToLowerCase(args[0]);
+	
+	if (strcmp(cmd, "dir") == 0) {
+		dir(args);
+	}
+	return exitCode;
 }
+
+
