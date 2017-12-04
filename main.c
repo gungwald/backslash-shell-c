@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>	/* getcwd */
+#include <sys/types.h>
+#include <dirent.h>
 
 #include <gc.h>
 #include <readline/readline.h>
@@ -31,6 +33,7 @@ static ArrayListOfString parse(String line);
 static int eval(ArrayListOfString args);
 static String getCurrentDirectory();
 static char *replaceChar(char *s, char toReplace, char replacement);
+static int dir(ArrayListOfString args);
 
 static bool running = false;
 static char drive[MAX_DRIVE_LEN + 1];
@@ -97,7 +100,7 @@ ArrayListOfString parse(String line)
 int eval(ArrayListOfString args)
 {
 	int exitCode = 0;
-	String cmd = sToLowerCase(args[0]);
+	String cmd = sToLowerCase(alsGet(args,0));
 	
 	if (strcmp(cmd, "dir") == 0) {
 		dir(args);
@@ -105,4 +108,25 @@ int eval(ArrayListOfString args)
 	return exitCode;
 }
 
+int dir(ArrayListOfString args)
+{
+    int exitCode = 0;
+    printf("Volume in drive %s has no label.\n", drive);
+    printf("Volume Serial Number is 0000-0000\n\n");
+    String dirName = getCurrentDirectory();
+    printf("Directory of %s%s\n\n", drive, dirName);
+    DIR *d = opendir(dirName);
+    if (d == NULL) {
+        perror(dirName);
+        exitCode = 1;
+    }
+    else {
+        struct dirent *entry;
+        while ((entry = readdir(d)) != NULL) {
+            printf("%s\n", entry->d_name);
+        }
+        closedir(d);
+    }
+    return exitCode;
+}
 
